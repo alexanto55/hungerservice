@@ -1,17 +1,16 @@
 package com.hunger.main.controller;
 
+import com.hunger.bean.ResponseList;
 import com.hunger.bean.ResponseMessage;
 import com.hunger.service.CustomerService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/hunger")
 public class CustomerController {
 
@@ -20,26 +19,25 @@ public class CustomerController {
         return "Hi...How are you?";
     }
 
-    @RequestMapping(value = "/login/userName={userName}&&pwd={pwd}", method = RequestMethod.GET)
-    public ResponseMessage loginApp(@PathVariable Map<String,String> pathVars) throws IOException, GeneralSecurityException{
+    @RequestMapping(value = "/login/userName={userName}&&pwd={pwd}",
+            method = RequestMethod.GET,
+            produces = "application/json;charset=UTF-8")
+    public @ResponseBody ResponseList loginApp(@PathVariable Map<String,String> pathVars)
+            throws IOException, GeneralSecurityException{
 
         String userName = pathVars.get("userName");
         String pwd = pathVars.get("pwd");
 
-        ResponseMessage responseMessage = new ResponseMessage();
         CustomerService customerService = new CustomerService();
+        ResponseList responseList = new ResponseList();
 
         Boolean loginResult = customerService.validateCustomer(userName, pwd);
 
-        if (loginResult) {
-            responseMessage.setResponseCode("200");
-            responseMessage.setResponseMessage("Success");
-            responseMessage.setResponseDesc("Valid user name and password");
+        if (!loginResult) {
+            responseList.failureMessage();
         } else {
-            responseMessage.setResponseCode("400");
-            responseMessage.setResponseMessage("Fail");
-            responseMessage.setResponseDesc("Invalid user name and password");
+            responseList.successMessage();
         }
-        return responseMessage;
+        return responseList;
     }
 }
