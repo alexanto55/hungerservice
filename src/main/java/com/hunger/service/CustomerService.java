@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-
-import com.google.api.services.bigquery.model.TableRow;
 
 @Service
 public class CustomerService {

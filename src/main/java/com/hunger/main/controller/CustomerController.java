@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,9 +21,8 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/login/userName={userName}&&pwd={pwd}",
-            method = RequestMethod.GET,
-            produces = "application/json;charset=UTF-8")
-    public @ResponseBody ResponseList loginApp(@PathVariable Map<String,String> pathVars)
+            method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public @ResponseBody List<ResponseMessage> loginApp(@PathVariable Map<String,String> pathVars)
             throws IOException, GeneralSecurityException{
 
         String userName = pathVars.get("userName");
@@ -34,10 +34,9 @@ public class CustomerController {
         Boolean loginResult = customerService.validateCustomer(userName, pwd);
 
         if (!loginResult) {
-            responseList.failureMessage();
+            return responseList.failureMessage();
         } else {
-            responseList.successMessage();
+            return responseList.successMessage();
         }
-        return responseList;
     }
 }

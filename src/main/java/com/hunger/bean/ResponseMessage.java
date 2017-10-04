@@ -1,6 +1,6 @@
 package com.hunger.bean;
 
-public class ResponseMessage extends ItemList{
+public class ResponseMessage {
 
     private String responseCode;
     private String responseMessage;

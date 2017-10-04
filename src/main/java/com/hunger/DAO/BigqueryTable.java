@@ -18,7 +18,7 @@ import java.util.Collections;
 public class BigqueryTable {
 
     private static String ProjectID = "hunger-180002";
-    private static String credentialURL = "C:\\Users\\axa8047\\Desktop\\Drive D\\SelfStudy\\Hunger-App\\hunger-04e932189595.json";
+    private static String credentialURL = "src/main/hunger-04e932189595.json";
 
     public Bigquery getBigquryTable () throws IOException, GeneralSecurityException{
 
