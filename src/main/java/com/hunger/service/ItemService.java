@@ -5,6 +5,7 @@ import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import com.hunger.DAO.ItemDAO;
 import com.hunger.bean.ItemList;
+import com.hunger.bean.OrderRequest;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -40,5 +41,10 @@ public class ItemService {
         } else {
             return itemArrayList;
         }
+    }
+
+    public String createOrder(OrderRequest orderRequest) {
+
+        return orderRequest.toString();
     }
 }

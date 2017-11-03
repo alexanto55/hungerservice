@@ -1,9 +1,7 @@
 package com.hunger.service;
 
 import com.google.api.services.bigquery.model.GetQueryResultsResponse;
-import com.google.api.services.bigquery.model.TableCell;
 import com.hunger.DAO.CustomerDAO;
-import com.hunger.bean.ResponseMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
