@@ -6,6 +6,7 @@ import com.google.api.services.bigquery.model.TableRow;
 import com.hunger.DAO.ItemDAO;
 import com.hunger.bean.ItemList;
 import com.hunger.bean.OrderRequest;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -18,22 +19,21 @@ public class ItemService {
         ArrayList<ItemList> itemArrayList = new ArrayList<ItemList>();
 
         GetQueryResultsResponse results = itemDAO.fetchMenuListDAO(category);
+        /* Check whether  query result is not an empty list */
         if (results.getTotalRows() != null && results.getTotalRows().intValue() > 0) {
-            for (TableRow rows: results.getRows()) {
+            for (TableRow rows: results.getRows()) { // Fetch rows from results
                 ItemList itemList = new ItemList();
-                int cellCount = 0;
                 for (TableCell cell: rows.getF()) {
-                    switch (cellCount) {
-                        case 0: itemList.setItemId(cell.getV().toString());
-                            break;
-                        case 1: itemList.setItemName(cell.getV().toString());
-                            break;
-                        case 2: itemList.setItemDesc(cell.getV().toString());
-                            break;
-                        case 3: itemList.setPrice(cell.getV().toString());
-                            break;
-                    }
-                    cellCount++;
+                    String itemCell = cell.getV().toString();
+                    /** Convert string object into JSONObject
+                    *
+                    */
+                    JSONObject itemJson = new JSONObject(itemCell);
+                    /* Assign each value into respective list parameter */
+                    itemList.setItemId(itemJson.get("item_id").toString());
+                    itemList.setItemName(itemJson.get("item").toString());
+                    itemList.setPrice(itemJson.get("unit_price").toString());
+                    itemList.setItemDesc(itemJson.get("item_desc").toString());
                 }
                 itemArrayList.add(itemList);
             }

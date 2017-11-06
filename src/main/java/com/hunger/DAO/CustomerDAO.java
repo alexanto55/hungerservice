@@ -4,6 +4,8 @@ import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.GetQueryResultsResponse;
 import com.google.api.services.bigquery.model.QueryRequest;
 import com.google.api.services.bigquery.model.QueryResponse;
+//import com.google.cloud.bigquery.QueryResponse;
+//import com.google.cloud.bigquery.FieldValue;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -24,6 +26,10 @@ public class CustomerDAO {
 
         /** execute the query **/
         QueryResponse query = bq.jobs().query(ProjectID, new QueryRequest().setQuery(loginSQL)).execute();
+
+//        for(FieldValue fieldValue: query) {
+//
+//        }
 
         /** Get the result **/
         GetQueryResultsResponse queryResults = bq.jobs().getQueryResults(

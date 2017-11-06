@@ -3,6 +3,8 @@ package com.hunger.main.controller;
 import com.hunger.bean.ResponseList;
 import com.hunger.bean.ResponseMessage;
 import com.hunger.service.CustomerService;
+import com.hunger.service.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
