@@ -1,5 +1,6 @@
 package com.hunger.main.controller;
 
+import com.hunger.DAO.PaymentResource;
 import com.hunger.bean.*;
 import com.hunger.service.ConvertJSON;
 import com.hunger.service.ItemService;
@@ -22,8 +23,17 @@ public class ItemController {
         return convertJson.BuildJSON(itemList).toString();
     }
 
-    @RequestMapping(value ="/crtorder", method = RequestMethod.POST, consumes = "application/json")
+   /* @RequestMapping(value ="/crtorder", method = RequestMethod.POST, consumes = "application/json")
     public OrderRequest createOrder(@RequestBody OrderRequest orderRequest) {
+        itemService.createOrder(orderRequest);
         return orderRequest;
+    }*/
+
+    @RequestMapping(value = "/crtorder",method =RequestMethod.POST )
+    public void payment(@RequestBody OrderRequest orderRequest) throws IOException,GeneralSecurityException{
+        PaymentResource paymentResource = new PaymentResource();
+        paymentResource.getPaymentDetails(orderRequest);
+
+
     }
 }
