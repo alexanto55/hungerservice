@@ -2,11 +2,11 @@ package com.hunger.bean;
 
 public class ResponseMessage {
 
-    private String responseCode;
+    private int responseCode;
     private String responseMessage;
     private String responseDesc;
 
-    public ResponseMessage(String responseCode, String responseMessage, String responseDesc) {
+    public ResponseMessage(int responseCode, String responseMessage, String responseDesc) {
         super();
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
@@ -17,11 +17,11 @@ public class ResponseMessage {
 
     }
 
-    public String getResponseCode() {
+    public int getResponseCode() {
         return responseCode;
     }
 
-    public void setResponseCode(String responseCode) {
+    public void setResponseCode(int responseCode) {
         this.responseCode = responseCode;
     }
 

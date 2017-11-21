@@ -3,53 +3,94 @@ package com.hunger.DAO;
 import com.google.api.services.bigquery.Bigquery;
 import com.google.api.services.bigquery.model.QueryRequest;
 import com.google.api.services.bigquery.model.QueryResponse;
+import com.google.api.services.bigquery.model.TableCell;
+import com.google.api.services.bigquery.model.TableRow;
 import com.hunger.bean.OrderRequest;
-import com.hunger.bean.PaymentInfo;
+import com.hunger.utility.PaymentException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 public class PaymentResource {
 
-    public void getPaymentDetails(OrderRequest orderRequest) throws IOException,GeneralSecurityException{
-        PaymentInfo paymentInfo = new PaymentInfo();
-        PaymentResource paymentDAO   = new PaymentResource();
+    private String CARD_NBR;
+    private int CVV;
+    private String EXP_DT;
+    private String ZIP_CODE;
+    private String CUSTOMER_FN;
+    private String CUSTOMER_LN;
+    private String CUSTOMER_ID;
+    private double ORDER_TOTAL;
+    private static String ProjectID = "hunger-180002";
+    private BigqueryTable bigqueryTable;
+    private Bigquery bq;
 
-        String cardNumber = orderRequest.getOrderDetails().getPaymentDetails().getCardNumber();
-        String cardCvv= orderRequest.getOrderDetails().getPaymentDetails().getCardCVVNumber();
-        String cardExpDate=orderRequest.getOrderDetails().getPaymentDetails().getCardExpDate();
-        String zipCode=orderRequest.getOrderDetails().getPaymentDetails().getZipcode();
-        String cardHolderFirstName=orderRequest.getOrderDetails().getPaymentDetails().getCardHolderFirstName();
-        String cardHolderLastName=orderRequest.getOrderDetails().getPaymentDetails().getCardHolderLastName();
-        String customerID=orderRequest.getOrderDetails().getCustomerDetails().getCustomerId();
-        System.out.println("CARDNUMBER:" +cardNumber);
-        insertPayment(customerID,cardNumber,cardCvv,cardExpDate,zipCode,cardHolderFirstName,
-                cardHolderLastName);
+    public PaymentResource() throws IOException,GeneralSecurityException {
+        bigqueryTable = new BigqueryTable();
+        bq = bigqueryTable.getBigquryTable();
     }
 
+    public void getPaymentDetails(OrderRequest orderRequest) throws IOException,GeneralSecurityException, PaymentException {
 
-    private static String ProjectID = "hunger-180002";
+        CARD_NBR = orderRequest.getOrderDetails().getPaymentDetails().getCardNumber();
+        CVV = orderRequest.getOrderDetails().getPaymentDetails().getCardCVVNumber();
+        EXP_DT = orderRequest.getOrderDetails().getPaymentDetails().getCardExpDate();
+        ZIP_CODE = orderRequest.getOrderDetails().getPaymentDetails().getZipcode();
+        CUSTOMER_FN = orderRequest.getOrderDetails().getPaymentDetails().getCardHolderFirstName();
+        CUSTOMER_LN = orderRequest.getOrderDetails().getPaymentDetails().getCardHolderLastName();
+        CUSTOMER_ID = orderRequest.getOrderDetails().getCustomerDetails().getCustomerId();
+        ORDER_TOTAL = orderRequest.getOrderDetails().getOrderTotal();
+    }
 
-    public void insertPayment(String customerID,String cardNumber,String cVV,String cardExpDate,
-                              String zipCode,String cardHolderFirstName,String cardHolderLastName)
+    public void verifyPaymentDetails(OrderRequest orderRequest) throws IOException, PaymentException, GeneralSecurityException {
+
+        getPaymentDetails(orderRequest);
+
+        String paymentSQL = "SELECT TO_JSON_STRING(I) FROM ProjectData.payment_card_repo I WHERE I.card_number ='"+CARD_NBR+"'";
+
+        QueryResponse queryResponse = this.bq.jobs().query(ProjectID,
+                new QueryRequest().setQuery(paymentSQL).setUseLegacySql(false)).execute();
+
+        if ( queryResponse.getTotalRows().intValue() > 0 ) {
+            for (TableRow rows:queryResponse.getRows()) {
+                for (TableCell cell : rows.getF()) {
+                   String cellValue = cell.getV().toString();
+                    JSONObject jsonObject = new JSONObject(cellValue);
+                    if ((CVV == (int) jsonObject.get("cvv_nbr"))
+                            && (EXP_DT.equalsIgnoreCase(jsonObject.get("exp_dt").toString()))
+                            && (ZIP_CODE.equalsIgnoreCase(jsonObject.get("zip_code").toString()))) {
+                        if (ORDER_TOTAL > (double) jsonObject.get("avail_balance")) {
+                            throw new PaymentException("Account doesn't have enough balance to process this request");
+                        } else {
+                                //Yet to write code
+                        }
+                    }
+                    else {
+                        throw new PaymentException("card details are not matching");
+                    }
+                }
+            }
+        } else  {
+            throw new PaymentException("card number is not valid");
+        }
+    }
+
+    public void insertPayment()
             throws IOException,GeneralSecurityException{
 
         /**inserting payment details in payment table**/
 
-        String paymentDetails="insert into ProjectData.ord_paymt_dtl "+
-                "(customer_id,card_number,cvv,card_exp_date,zip_code,card_first_name,card_last_name) values "+
-                "('"+customerID+"','"+cardNumber+"','"+cVV+"','"+cardExpDate+"','"+zipCode+"'," +
-                "'"+cardHolderFirstName+"','"+cardHolderLastName+"')";
+        String insertPaymentSQL="insert into ProjectData.ord_paymt_dtl "+
+                "(customer_id,order_id,card_number,cvv,card_exp_date,zip_code,card_first_name,card_last_name, crt_dt, crt_ts) values "+
+                "('"+CUSTOMER_ID+"','H1','"+CARD_NBR+"','"+CVV+"','"+EXP_DT+"','"+ZIP_CODE+"'," +
+                "'"+CUSTOMER_FN+"','"+CUSTOMER_LN+"',CURRENT_DATE,CURRENT_TIME)";
 
-        System.out.println("PaymentDetails:"+paymentDetails);
-        BigqueryTable bigqueryTable = new BigqueryTable();
-        Bigquery bq = bigqueryTable.getBigquryTable();
+        System.out.println("PaymentDetails:"+insertPaymentSQL);
 
         /**execute the query**/
-        QueryResponse query = bq.jobs().query(ProjectID,
-                new QueryRequest().setQuery(paymentDetails).setUseLegacySql(false)).execute();
-
-
+        QueryResponse query = this.bq.jobs().query(ProjectID,
+                new QueryRequest().setQuery(insertPaymentSQL).setUseLegacySql(false)).execute();
     }
 
 }

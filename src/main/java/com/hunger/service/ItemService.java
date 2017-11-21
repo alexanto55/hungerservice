@@ -4,15 +4,30 @@ import com.google.api.services.bigquery.model.GetQueryResultsResponse;
 import com.google.api.services.bigquery.model.TableCell;
 import com.google.api.services.bigquery.model.TableRow;
 import com.hunger.DAO.ItemDAO;
+import com.hunger.DAO.PaymentResource;
+import com.hunger.DAO.ValidateOrder;
 import com.hunger.bean.ItemList;
 import com.hunger.bean.OrderRequest;
+import com.hunger.utility.OrderException;
+import com.hunger.utility.PaymentException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
+@Service
 public class ItemService {
+
+    private PaymentResource paymentResource;
+    private ValidateOrder validateOrder;
+
+    public ItemService() throws IOException, GeneralSecurityException{
+        this.paymentResource = new PaymentResource();
+        this.validateOrder = new ValidateOrder();
+    }
 
     public ArrayList<ItemList> fetchMenuService(String category) throws IOException, GeneralSecurityException {
         ItemDAO itemDAO = new ItemDAO();
@@ -41,6 +56,13 @@ public class ItemService {
         } else {
             return itemArrayList;
         }
+    }
+
+    public void verifyOrderRequest(OrderRequest orderRequest)
+            throws PaymentException, IOException, GeneralSecurityException, OrderException {
+        paymentResource.verifyPaymentDetails(orderRequest);
+        validateOrder.validateOrderRequest(orderRequest);
+
     }
 
     public String createOrder(OrderRequest orderRequest) {

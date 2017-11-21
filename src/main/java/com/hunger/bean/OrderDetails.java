@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class OrderDetails {
 
     @JsonProperty("orderTotal")
-    private String orderTotal;
+    private double orderTotal;
     @JsonProperty("orderSubTotal")
-    private String orderSubTotal;
+    private double orderSubTotal;
     @JsonProperty("taxAmount")
-    private String taxAmount;
+    private double taxAmount;
 
     @JsonProperty("customerDetails")
     private CustomerInfo customerDetails;
@@ -28,27 +28,27 @@ public class OrderDetails {
         this.items = items;
     }
 
-    public String getOrderTotal() {
+    public double getOrderTotal() {
         return orderTotal;
     }
 
-    public void setOrderTotal(String orderTotal) {
+    public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
     }
 
-    public String getOrderSubTotal() {
+    public double getOrderSubTotal() {
         return orderSubTotal;
     }
 
-    public void setOrderSubTotal(String orderSubTotal) {
+    public void setOrderSubTotal(double orderSubTotal) {
         this.orderSubTotal = orderSubTotal;
     }
 
-    public String getTaxAmount() {
+    public double getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(String taxAmount) {
+    public void setTaxAmount(double taxAmount) {
         this.taxAmount = taxAmount;
     }
 

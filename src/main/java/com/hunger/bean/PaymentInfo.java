@@ -7,10 +7,10 @@ public class PaymentInfo {
     @JsonProperty("cardNumber")
     private String cardNumber;
     @JsonProperty("cardCVVNumber")
-    private String cardCVVNumber;
+    private int cardCVVNumber;
     @JsonProperty("cardExpDate")
     private String cardExpDate;
-    @JsonProperty("zipcode")
+    @JsonProperty("zipCode")
     private String zipcode;
     @JsonProperty("cardHolderFirstName")
     private String cardHolderFirstName;
@@ -25,11 +25,11 @@ public class PaymentInfo {
         this.cardNumber = cardNumber;
     }
 
-    public String getCardCVVNumber() {
+    public int getCardCVVNumber() {
         return cardCVVNumber;
     }
 
-    public void setCardCVVNumber(String cardCVVNumber) {
+    public void setCardCVVNumber(int cardCVVNumber) {
         this.cardCVVNumber = cardCVVNumber;
     }
 

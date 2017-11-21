@@ -3,8 +3,6 @@ package com.hunger.main.controller;
 import com.hunger.bean.ResponseList;
 import com.hunger.bean.ResponseMessage;
 import com.hunger.service.CustomerService;
-import com.hunger.service.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -27,13 +25,10 @@ public class CustomerController {
     public @ResponseBody List<ResponseMessage> loginApp(@PathVariable Map<String,String> pathVars)
             throws IOException, GeneralSecurityException{
 
-        String userName = pathVars.get("userName");
-        String pwd = pathVars.get("pwd");
-
         CustomerService customerService = new CustomerService();
         ResponseList responseList = new ResponseList();
 
-        Boolean loginResult = customerService.validateCustomer(userName, pwd);
+        Boolean loginResult = customerService.validateCustomer(pathVars.get("userName"), pathVars.get("pwd"));
 
         if (!loginResult) {
             return responseList.failureMessage();
