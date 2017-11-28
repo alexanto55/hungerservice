@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="db416885-c4e6-477e-8737-757308a1ceb9" name="Default" comment="read order create json request">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+    <list default="true" id="db416885-c4e6-477e-8737-757308a1ceb9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HungerApp.iml" afterPath="$PROJECT_DIR$/HungerApp.iml" />
     </list>
     <ignored path="$PROJECT_DIR$/target/classes/" />
     <manually-removed-from-ignored>
@@ -404,7 +402,7 @@
       <workItem from="1509924121768" duration="2966000" />
       <workItem from="1509928629895" duration="8970000" />
       <workItem from="1511190937440" duration="19410000" />
-      <workItem from="1511273839454" duration="7657000" />
+      <workItem from="1511273839454" duration="7678000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1506521180496</created>
@@ -511,11 +509,18 @@
       <option name="project" value="LOCAL" />
       <updated>1511882742178</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="read order create json request">
+      <created>1511887247120</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1511887247120</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129587000" />
+    <option name="totallyTimeSpent" value="129608000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
