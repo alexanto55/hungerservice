@@ -47,7 +47,9 @@ public class PaymentResource {
 
         getPaymentDetails(orderRequest);
 
-        String paymentSQL = "SELECT TO_JSON_STRING(I) FROM ProjectData.payment_card_repo I WHERE I.card_number ='"+CARD_NBR+"'";
+        String paymentSQL = "SELECT TO_JSON_STRING(I) " +
+                "FROM ProjectData.payment_card_repo I " +
+                "WHERE I.card_number ='"+CARD_NBR+"'";
 
         QueryResponse queryResponse = this.bq.jobs().query(ProjectID,
                 new QueryRequest().setQuery(paymentSQL).setUseLegacySql(false)).execute();
@@ -81,16 +83,33 @@ public class PaymentResource {
 
         /**inserting payment details in payment table**/
 
-        String insertPaymentSQL="insert into ProjectData.ord_paymt_dtl "+
-                "(customer_id,order_id,card_number,cvv,card_exp_date,zip_code,card_first_name,card_last_name, crt_dt, crt_ts) values "+
-                "('"+CUSTOMER_ID+"','H1','"+CARD_NBR+"','"+CVV+"','"+EXP_DT+"','"+ZIP_CODE+"'," +
-                "'"+CUSTOMER_FN+"','"+CUSTOMER_LN+"',CURRENT_DATE,CURRENT_TIME)";
+        String INSERTPAYMENTSQL="INSERT INTO PROJECTDATA.ORD_PAYMT_DTL "+
+                "(CUSTOMER_ID," +
+                "ORDER_ID," +
+                "CARD_NUMBER," +
+                "CVV," +
+                "CARD_EXP_DATE," +
+                "ZIP_CODE," +
+                "CARD_FIRST_NAME," +
+                "CARD_LAST_NAME, " +
+                "CRT_DT, " +
+                "CRT_TS) VALUES "+
+                "('"+CUSTOMER_ID+"'," +
+                "'H1'," +
+                "'"+CARD_NBR+"'," +
+                "'"+CVV+"'," +
+                "'"+EXP_DT+"'," +
+                "'"+ZIP_CODE+"'," +
+                "'"+CUSTOMER_FN +"'," +
+                "'"+CUSTOMER_LN+"'," +
+                "CURRENT_DATE," +
+                "CURRENT_TIME)";
 
-        System.out.println("PaymentDetails:"+insertPaymentSQL);
+        System.out.println("PaymentDetails:"+INSERTPAYMENTSQL);
 
         /**execute the query**/
         QueryResponse query = this.bq.jobs().query(ProjectID,
-                new QueryRequest().setQuery(insertPaymentSQL).setUseLegacySql(false)).execute();
+                new QueryRequest().setQuery(INSERTPAYMENTSQL).setUseLegacySql(false)).execute();
     }
 
 }
